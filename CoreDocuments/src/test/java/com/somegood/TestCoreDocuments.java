@@ -1,5 +1,13 @@
 package com.somegood;
 
+import com.scottbyrns.utilities.FatalMappingException;
+import com.scottbyrns.utilities.InvalidJSONStringException;
+import com.scottbyrns.utilities.JSONObjectMapper;
+import org.junit.Test;
+
+
+import static junit.framework.Assert.fail;
+
 /**
  * Copyright (C) 2012 by Scott Byrns
  * http://github.com/scottbyrns
@@ -17,5 +25,25 @@ package com.somegood;
  */
 public class TestCoreDocuments
 {
+    @Test
+    public void storeJSONDocument () {
+        JunitTestDocument junitTestDocument = null;
+        try {
+            junitTestDocument = JSONObjectMapper.mapJSONStringToEntity("{ \"documentName\": \"Test Document\", \"mapList\": [{\"key\":{\"latitude\":123,\"longitude\":321}}, {\"name\": {\"latitude\":123,\"longitude\":321}, \"location\": {\"latitude\":123,\"longitude\":321}} ] }", JunitTestDocument.class);
+        }
+        catch (InvalidJSONStringException e) {
+            e.printStackTrace();
+            fail("The object mapper incorrectly reported the sample JSON to be invalid.");
+        }
+        catch (FatalMappingException e) {
+            e.printStackTrace();
+            fail("The JSON could not be mapped to the entity.");
+        }
+        new CoreDocuments().as("junit-test-document").store(junitTestDocument);
 
+//        assertTrue(
+//                "",
+//
+//                  )
+    }
 }

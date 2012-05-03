@@ -1,6 +1,7 @@
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
 import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 
 /**
  * Copyright (C) 2012 by Scott Byrns
@@ -24,11 +25,17 @@ public class TestJedis
     {
         Jedis jedis = new Jedis("localhost");
         jedis.connect();
-        jedis.set("foo",
-                  "bar");
-        String value = jedis.get("foo");
+        if (jedis.isConnected()) {
+            jedis.set("foo",
+                      "bar");
+            String value = jedis.get("foo");
 
-        assertTrue("The value returned from redis should be `bar`.",
-                   "bar".matches(value));
+            assertTrue("The value returned from redis should be `bar`.",
+                       "bar".matches(value));
+        }
+        else {
+            fail("Unable to connect to a Redis instance.");
+        }
+
     }
 }
